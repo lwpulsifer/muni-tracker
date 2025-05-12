@@ -30,13 +30,13 @@ export async function getAllLines(): Promise<MuniLine[]> {
 }
 
 export async function fetchVehiclePositions(selectedLines: string[] = []) {
-  const url = `https://api.511.org/transit/vehiclepositions?api_key=${API_KEY}&agency=SF`
+  const url = `https://api.511.org/transit/VehicleMonitoring?api_key=${API_KEY}&agency=SF&format=json`
 
   try {
     const response = await fetch(url, { next: { revalidate: 30 } })
 
     if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`)
+      throw new Error(`API request failed with status ${response.status} and body ${await response.text()}`)
     }
 
     return await response.json()

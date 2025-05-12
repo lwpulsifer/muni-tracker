@@ -3,11 +3,12 @@ import MuniTracker from "@/components/muni-tracker"
 import LineSelector from "@/components/line-selector"
 import { getAllLines } from "@/lib/muni-api"
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: { lines?: string }
-}) {
+export default async function Home(
+  props: {
+    searchParams: Promise<{ lines?: string }>
+  }
+) {
+  const searchParams = await props.searchParams;
   // Get all available lines for the selector
   const allLines = await getAllLines()
 
@@ -22,8 +23,8 @@ export default async function Home({
         <LineSelector allLines={allLines} selectedLines={selectedLines} />
       </div>
 
-      <div className="flex-1 min-h-[500px] rounded-lg overflow-hidden border">
-        <Suspense fallback={<div className="h-full w-full flex items-center justify-center">Loading map...</div>}>
+      <div className="flex-1 min-h-[500px] rounded-lg border">
+        <Suspense fallback={<div className="h-full w-full flex items-center justify-center relative">Loading map...</div>}>
           <MuniTracker selectedLines={selectedLines} />
         </Suspense>
       </div>

@@ -1,6 +1,38 @@
 "use client"
 
-import type { Vehicle, ApiResponse } from "./types"
+import type { SiriResponse, Vehicle } from "./types"
+
+function getVehiclesByRoutesTyped(data: SiriResponse, routeIds: string[]): Vehicle[] {
+  console.log("ROUTES");
+  console.log(routeIds);
+  const vehicleActivities = data.Siri.ServiceDelivery.VehicleMonitoringDelivery.VehicleActivity;
+  
+  return vehicleActivities
+    .filter(activity => activity.MonitoredVehicleJourney.LineRef && routeIds.includes(activity.MonitoredVehicleJourney.LineRef))
+    .map(activity => {
+      const journey = activity.MonitoredVehicleJourney;
+      
+      return {
+        vehicleId: journey.VehicleRef,
+        routeId: journey.LineRef,
+        routeName: journey.PublishedLineName,
+        position: {
+          latitude: parseFloat(journey.VehicleLocation.Latitude),
+          longitude: parseFloat(journey.VehicleLocation.Longitude)
+        },
+        bearing: parseFloat(journey.Bearing),
+        occupancy: journey.Occupancy,
+        timestamp: activity.RecordedAtTime,
+        destination: journey.DestinationName,
+        nextStop: journey.MonitoredCall ? journey.MonitoredCall.StopPointName : null,
+        upcomingStops: journey.OnwardCalls ? 
+          journey.OnwardCalls.OnwardCall.map(call => ({
+            name: call.StopPointName,
+            expectedArrival: call.ExpectedArrivalTime
+          })) : []
+      };
+    });
+}
 
 export async function fetchVehicleLocations(selectedLines: string[] = []): Promise<Vehicle[]> {
   try {
@@ -10,29 +42,10 @@ export async function fetchVehicleLocations(selectedLines: string[] = []): Promi
       throw new Error(`API request failed with status ${response.status}`)
     }
 
-    const data: ApiResponse = await response.json()
+    const data: SiriResponse = await response.json();
 
     // Transform the API response into our Vehicle type
-    const vehicles = data.entity
-      .filter((entity) => entity.vehicle)
-      .map((entity) => {
-        const vehicle = entity.vehicle!
-        return {
-          id: vehicle.vehicle.id,
-          routeId: vehicle.trip.route_id,
-          directionId: vehicle.trip.direction_id.toString(),
-          lat: vehicle.position.latitude,
-          lon: vehicle.position.longitude,
-          heading: vehicle.position.bearing,
-          speedKmHr: vehicle.position.speed,
-          timestamp: vehicle.timestamp,
-        }
-      })
-
-    // Filter by selected lines if any are specified
-    if (selectedLines.length > 0) {
-      return vehicles.filter((vehicle) => selectedLines.includes(vehicle.routeId))
-    }
+    const vehicles = getVehiclesByRoutesTyped(data, selectedLines);
 
     return vehicles
   } catch (error) {
