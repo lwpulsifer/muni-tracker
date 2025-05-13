@@ -31,13 +31,19 @@ function ArrivalTime({
 					: minutesAway < 15
 					? "bg-green-400"
 					: "bg-gray-100",
-				"w-full p-4"
+				"w-full p-4 flex grow items-center"
 			)}
 		>{`${lineRef}: ${minutesAway} minutes`}</div>
 	);
 }
 
-export default async function Stop({ stopId }: { stopId: number }) {
+export default async function Stop({
+	stopId,
+	label,
+}: {
+	stopId: number;
+	label: string;
+}) {
 	const arrivals = await getArrivalTimes(stopId);
 
 	const arrivalsByDestination = groupBy(
@@ -45,16 +51,18 @@ export default async function Stop({ stopId }: { stopId: number }) {
 		(journey) => journey.DestinationName
 	);
 	return (
-		<div className="size-full">
+		<div className="size-full flex grow">
 			{Object.entries(arrivalsByDestination).map(
 				([destinationName, arrivals]) => (
 					<div
 						key={destinationName}
-						className="flex flex-col items-start rounded-2xl overflow-hidden bg-gray-50"
+						className="flex flex-col items-start overflow-hidden bg-gray-50 grow"
 					>
-						<h3 className="font-bold bg-gray-100 size-full p-4">
-							{destinationName}
-						</h3>
+						<div className="font-bold bg-gray-100 p-4 w-full">
+							<span className="font-bold">{label}</span>
+							{" — "}
+							<span>{destinationName}</span>
+						</div>
 						{arrivals
 							.map((a) => ({
 								...a,

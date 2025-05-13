@@ -40,10 +40,10 @@ export default function RefreshWrapper({
 	}, [refreshInterval, refreshData]);
 
 	return (
-		<div>
+		<>
 			{children}
-			<div className="mt-4 text-sm text-gray-500 flex items-center">
-				<div className="mr-2">Auto-refreshing in {timeUntilRefresh}s</div>
+			<div className="text-sm text-gray-500 flex items-center justify-center gap-2 w-full grow p-4">
+				<div>Auto-refreshing in {timeUntilRefresh}</div>
 				<button
 					onClick={refreshData}
 					className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded"
@@ -51,6 +51,6 @@ export default function RefreshWrapper({
 					Refresh Now
 				</button>
 			</div>
-		</div>
+		</>
 	);
 }
