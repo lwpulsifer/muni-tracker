@@ -27,10 +27,10 @@ function ArrivalTime({
 				minutesAway < 5
 					? "bg-red-400"
 					: minutesAway < 10
-					? "bg-orange-400"
-					: minutesAway < 15
 					? "bg-green-400"
-					: "bg-gray-100",
+					: minutesAway < 15
+					? "bg-yellow-400"
+					: "bg-white",
 				"w-full p-4 flex grow items-center"
 			)}
 		>{`${lineRef}: ${minutesAway} minutes`}</div>

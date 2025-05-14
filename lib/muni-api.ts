@@ -1,4 +1,5 @@
 import { StopMonitoringData } from "./stop-monitoring-types";
+import { SFMTAResponse } from "./stop-types";
 import type { MuniLine } from "./types";
 
 // This would typically come from an environment variable
@@ -51,4 +52,20 @@ export async function getArrivalTimes(stopId: number) {
 			return visit.MonitoredVehicleJourney;
 		}
 	);
+}
+
+export async function fetchStopsForLine(lineId: string) {
+	const url = `https://api.511.org/transit/stops?api_key=${API_KEY}&operator_id=SF&format=json&line_id=${lineId}`;
+	const response = await fetch(url, { next: { revalidate: 30 } });
+	if (!response.ok) {
+		throw new Error(
+			`API request failed with status ${
+				response.status
+			} and body ${await response.text()}`
+		);
+	}
+
+	const data = (await response.json()) as SFMTAResponse;
+
+	return data.Contents.dataObjects.ScheduledStopPoint;
 }
