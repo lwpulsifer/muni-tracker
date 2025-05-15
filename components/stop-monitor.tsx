@@ -25,7 +25,7 @@ function ArrivalTime({
 		<div
 			className={cn(
 				minutesAway < 2
-				? "hidden"
+				? "text-decoration-line" 
 				: minutesAway < 5
 					? "bg-red-700"
 					: minutesAway < 10
