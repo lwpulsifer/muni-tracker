@@ -27,11 +27,11 @@ function ArrivalTime({
 				minutesAway < 2
 				? "hidden"
 				: minutesAway < 5
-					? "bg-red-400"
+					? "bg-red-700"
 					: minutesAway < 10
-					? "bg-green-400"
-					: "bg-white",
-				"w-full p-4 flex grow items-center text-3xl text-gray-700"
+					? "bg-green-700"
+					: "bg-background",
+				"w-full p-4 flex grow items-center text-3xl text-primary"
 			)}
 		>{`${lineRef}: ${minutesAway} minute(s)`}</div>
 	);
@@ -56,9 +56,9 @@ export default async function Stop({
 				([destinationName, arrivals]) => (
 					<div
 						key={destinationName}
-						className="flex flex-col items-start overflow-hidden bg-gray-50 grow"
+						className="flex flex-col items-start overflow-hidden bg-background grow"
 					>
-						<div className="font-bold bg-gray-100 p-4 w-full text-black text-3xl">
+						<div className="font-bold bg-background p-4 w-full text-primary text-4xl">
 							<span className="font-bold">{label}</span>
 						</div>
 						{arrivals
