@@ -25,13 +25,13 @@ function ArrivalTime({
 		<div
 			className={cn(
 				minutesAway < 2
-				? "text-decoration-line" 
+				? "text-decoration-line"
 				: minutesAway < 5
 					? "bg-red-700"
 					: minutesAway < 10
 					? "bg-green-700"
 					: "bg-background",
-				"w-full p-4 flex grow items-center text-3xl text-primary"
+				"w-full p-8 flex justify-stretch text-5xl text-primary"
 			)}
 		>{`${lineRef}: ${minutesAway} minute(s)`}</div>
 	);
@@ -51,14 +51,14 @@ export default async function Stop({
 		(journey) => journey.DestinationName
 	);
 	return (
-		<div className="size-full flex grow">
+		<div className="size-full flex grow w-full">
 			{Object.entries(arrivalsByDestination).map(
 				([destinationName, arrivals]) => (
 					<div
 						key={destinationName}
-						className="flex flex-col items-start overflow-hidden bg-background grow"
+						className="flex flex-col items-start overflow-hidden bg-background w-full"
 					>
-						<div className="font-bold bg-background p-4 w-full text-primary text-4xl">
+						<div className="font-bold bg-background p-4 w-full text-primary text-5xl">
 							<span className="font-bold">{label}</span>
 						</div>
 						{arrivals
