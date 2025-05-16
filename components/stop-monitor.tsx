@@ -25,11 +25,11 @@ function ArrivalTime({
 		<div
 			className={cn(
 				minutesAway < 2
-				? "text-decoration-line"
-				: minutesAway < 5
-					? "bg-red-700"
+					? "opacity-75"
+					: minutesAway < 5
+					? "bg-red-700 text-white font-bold"
 					: minutesAway < 10
-					? "bg-green-700"
+					? "bg-green-700 text-white font-bold"
 					: "bg-background",
 				"w-full p-8 flex justify-stretch text-5xl text-primary"
 			)}
